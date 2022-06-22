@@ -193,4 +193,4 @@ const display_movements = function (movements) {
 
 display_movements(account1.movements);
 
-console.log(typeof, 'test')
+console.log("text");
