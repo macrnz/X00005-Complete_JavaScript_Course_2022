@@ -357,7 +357,7 @@ const accountMovements = accounts.map((acc) => acc.movements);
 const allMovements = accountMovements.flat();
 const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
 const overallBalance2 = accounts.flatMap((acc) => acc + mov, 0);
-*/
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -373,6 +373,8 @@ console.log(movements);
 //console.log(movements.sort()); <-THIS ONE DOESN'T WORK
 //RETURN < 0, A will be before B
 //RETURN > 0, B will be before A
+
+//ASCENDING
 movements.sort((a, b) => {
   if (a > b) {
     return 1;
@@ -381,6 +383,20 @@ movements.sort((a, b) => {
     return -1;
   }
 });
+
+//DESCENDING
+movements.sort((a, b) => {
+  if (a > b) {
+    return -1;
+  }
+  if (b > a) {
+    return 1;
+  }
+});
+
+//SIMPLIFIED
+movements.sort((a, b) => a - b);
+*/
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -449,9 +465,11 @@ const inputClosePin = document.querySelector(".form__input--pin");
 
 //DISPLAY LOGS
 
-const display_movements = function (movements) {
+const display_movements = function (movements, sort = false) {
   movements.forEach(function (mov, i) {
-    //const original = containerMovements.innerHTML = '';
+    containerMovements.innerHTML = "";
+
+    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
     const type = mov > 0 ? "deposit" : "withdrawal";
 
@@ -620,4 +638,11 @@ btnClose.addEventListener("click", function (e) {
   inputCloseUsername.value = inputClosePin.value = " ";
 });
 
-//SORTING ARRAYS
+//SORTING MOVEMENTS
+
+let sorted = false;
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  display_movements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
