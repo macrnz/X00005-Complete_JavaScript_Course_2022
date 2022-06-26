@@ -67,7 +67,12 @@ class App {
   #workouts = [];
 
   constructor() {
+    //GET USER'S POSITION
     this._getPosition();
+
+    //GET DATA FROM LOCAL STORAGE
+    this._getLocalStorage();
+
     form.addEventListener("submit", this._newWorkOut.bind(this));
 
     //TOGGLE INPUTS
@@ -97,7 +102,12 @@ class App {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
     this.#map.on("click", this._showForm.bind(this));
+
+    this.#workouts.forEach((work) => {
+      this._renderWorkoutMarker(work);
+    });
   }
+
   _showForm(mapE) {
     this.#mapEvent = mapE;
     form.classList.remove("hidden");
@@ -176,6 +186,9 @@ class App {
 
     //HIDE FORM + CLEAR INPUT FIELDS
     this._hideForm();
+
+    //SET LOCAL STORAGE TO ALL WORKOUTS
+    this._setLocalStorage();
   }
   _renderWorkoutMarker(workout) {
     //DISPLAY MARKER
@@ -251,6 +264,22 @@ class App {
       animate: true,
       pan: { duration: 1 },
     });
+  }
+  _setLocalStorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
+  }
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem("workouts"));
+
+    if (!data) return;
+    this.#workouts = data;
+    this.#workouts.forEach((work) => {
+      this._renderWorkout(work);
+    });
+  }
+  reser() {
+    localStorage.removeItem("workouts");
+    location.reload();
   }
 }
 
