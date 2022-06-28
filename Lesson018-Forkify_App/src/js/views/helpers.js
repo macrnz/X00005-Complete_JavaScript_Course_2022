@@ -8,7 +8,7 @@ const timeout = function (s) {
     }, s * 1000);
   });
 };
-
+/*
 export const getJSON = async function (url) {
   try {
     //LOADING RECIPE
@@ -16,6 +16,28 @@ export const getJSON = async function (url) {
     //fetch(url);
     //"https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886"
     //"https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcd86"
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};*/
+
+export const AJAX = async function (url, uploadData = undefined) {
+  try {
+    const fetchPro = uploadData
+      ? fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(uploadData),
+        })
+      : fetch(url);
+
+    const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
     const data = await res.json();
 
     if (!res.ok) throw new Error(`${data.message} (${res.status})`);
